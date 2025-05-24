@@ -1,0 +1,1 @@
+package com.yappy.trnxd.backend.transaction.junior.adapter.producer.common;public interface CommonProducer<T> {    void sendMessage(String topic, T objectClass);    void failedToSendMessage(Exception e);}
