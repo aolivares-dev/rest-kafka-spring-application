@@ -1,0 +1,1 @@
+package com.yappy.trnxd.backend.transaction.junior.util;import lombok.experimental.UtilityClass;import static java.util.UUID.randomUUID;@UtilityClasspublic class TransactionUtil {    public static String generateTransactionUUID() {    return randomUUID().toString().replace("-", "");  }}
