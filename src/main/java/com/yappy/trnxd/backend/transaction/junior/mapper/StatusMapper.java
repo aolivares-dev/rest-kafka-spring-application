@@ -1,1 +1,0 @@
-package com.yappy.trnxd.backend.transaction.junior.mapper;import com.yappy.trnxd.backend.transaction.junior.enums.TransactionError;import com.yappy.trnxd.backend.transaction.junior.model.StatusDTO;import org.mapstruct.Mapper;@Mapper(componentModel = "spring")public interface StatusMapper {    StatusDTO toStatusDTO(TransactionError transactionError);}

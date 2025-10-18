@@ -1,1 +1,0 @@
-package com.yappy.trnxd.backend.transaction.junior.adapter.consumer.common;public interface CommonConsumer {    void listen(String topic);    void failedToListenMessage(Exception e);}

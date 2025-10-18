@@ -1,1 +1,0 @@
-package com.yappy.trnxd.backend.transaction.junior.enums;import lombok.AllArgsConstructor;import lombok.Getter;import lombok.NoArgsConstructor;@Getter@AllArgsConstructor@NoArgsConstructorpublic enum TransactionType {    PAYMENT("PAYMENT"),    TRANSFER("TRANSFER"),    WITHDRAWAL("WITHDRAWAL"),    DEPOSIT("DEPOSIT");    private String value;}
