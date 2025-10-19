@@ -16,26 +16,27 @@ public interface MerchantRepository extends CrudRepository<BusinessEntity, Long>
             """, nativeQuery = true)
     List<BusinessEntity> findTransactionsByID(@Param("businessID") String businessID);
 
-
-
     @Transactional
     @Modifying
     @Query(value = """
-            INSERT INTO yappy_payment.businesses (
+            INSERT INTO businesses (
                 id,
                 cli_uuid,
                 amount,
                 txn_type,
                 status,
                 operation_type
-            ) VALUES (
-                :BusinessEntity ->> 'id',
-                'CLI789012',
-                150.75,
-                'DEBIT',
-                'EXECUTED',
-                'PURCHASE'
-            );
+            )
+            VALUES (
+                JSON_UNQUOTE(JSON_EXTRACT(:jsonData, '$.id')),
+                JSON_UNQUOTE(JSON_EXTRACT(:jsonData, '$.cli_uuid')),
+                CAST(JSON_UNQUOTE(JSON_EXTRACT(:jsonData, '$.amount')) AS DECIMAL(10,2)),
+                JSON_UNQUOTE(JSON_EXTRACT(:jsonData, '$.txn_type')),
+                JSON_UNQUOTE(JSON_EXTRACT(:jsonData, '$.status')),
+                JSON_UNQUOTE(JSON_EXTRACT(:jsonData, '$.operation_type'))
+            )
             """, nativeQuery = true)
-    void saveTransaction(@Param("iValue") String BusinessEntity);
+    void saveTransaction(@Param("jsonData") String jsonData);
+
+
 }

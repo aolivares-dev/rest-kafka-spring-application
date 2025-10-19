@@ -1,6 +1,5 @@
 package com.yappy.trnxd.backend.transaction.junior.library.adapter.consumer;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yappy.trnxd.backend.transaction.junior.cross_model.model.TransactionRequestEntity;
 import com.yappy.trnxd.backend.transaction.junior.cross_model.model.TransactionResponseEntity;

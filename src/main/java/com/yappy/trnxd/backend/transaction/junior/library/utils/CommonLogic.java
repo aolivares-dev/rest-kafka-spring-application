@@ -4,16 +4,18 @@ import com.yappy.trnxd.backend.transaction.junior.library.enums.LogCatalogEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 @Slf4j
-@Component("CommonLogic")
+@Service
 @RequiredArgsConstructor
-public abstract class CommonLogic {
+public class CommonLogic {
 
-    public <T> List<T> fetchPaymentsByID(Function<String, List<T>> fetchFunction, String id) {
+    public <RESPONSE, REQUEST> RESPONSE fetchPaymentsByID(Function<REQUEST, RESPONSE> fetchFunction, REQUEST id) {
         String methodName = "fetchByDomain";
 
         try {
@@ -27,12 +29,12 @@ public abstract class CommonLogic {
     }
 
 
-    public void saveTransaction(Function<String, Void> fetchFunction, String id) {
+    public <REQUEST> void saveTransaction(Consumer<REQUEST> fetchFunction, REQUEST object) {
 
         String methodName = "saveTransaction";
 
         try {
-            fetchFunction.apply(id);
+            fetchFunction.accept(object);
         } catch (Exception e) {
             log.error(LogCatalogEnum.PREFIX_EXCEPTION_MESSAGE.getMessage(), e);
         } finally {
