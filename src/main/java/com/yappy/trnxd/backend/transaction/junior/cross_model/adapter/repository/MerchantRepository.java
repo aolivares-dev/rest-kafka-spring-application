@@ -37,6 +37,4 @@ public interface MerchantRepository extends CrudRepository<BusinessEntity, Long>
             )
             """, nativeQuery = true)
     void saveTransaction(@Param("jsonData") String jsonData);
-
-
 }

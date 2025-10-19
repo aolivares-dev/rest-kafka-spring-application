@@ -6,5 +6,14 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum TransactionStatusEnum {
-    COMPLETED, FAILED, IN_PROGRESS, CANCELLED;
+    COMPLETED("COMPLETED"),
+    FAILED("FAILED"),
+    IN_PROGRESS("IN_PROGRESS"),
+    CANCELLED("CANCELLED");
+
+    private final String key;
+
+    public boolean isNotEqual(TransactionStatusEnum status) {
+        return !this.equals(status);
+    }
 }

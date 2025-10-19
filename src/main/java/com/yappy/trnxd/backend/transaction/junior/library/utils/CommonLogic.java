@@ -1,9 +1,11 @@
 package com.yappy.trnxd.backend.transaction.junior.library.utils;
 
+import com.yappy.trnxd.backend.transaction.junior.cross_model.adapter.repository.entities.BusinessEntity;
+import com.yappy.trnxd.backend.transaction.junior.cross_model.adapter.repository.entities.PaymentEntity;
+import com.yappy.trnxd.backend.transaction.junior.cross_model.enums.TransactionStatusEnum;
 import com.yappy.trnxd.backend.transaction.junior.library.enums.LogCatalogEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,4 +44,12 @@ public class CommonLogic {
         }
     }
 
+    public <T> Boolean isValidStatus(List<T> items, Function<T, TransactionStatusEnum> statusGetter) {
+        for (T item : items) {
+            if (TransactionStatusEnum.COMPLETED.isNotEqual(statusGetter.apply(item))) {
+                return Boolean.FALSE;
+            }
+        }
+        return Boolean.TRUE;
+    }
 }
