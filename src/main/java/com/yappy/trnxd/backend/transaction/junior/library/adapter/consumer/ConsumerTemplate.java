@@ -16,22 +16,30 @@ public abstract class ConsumerTemplate<REQUEST> {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private KafkaTemplate<String, Object> kafkaTemplate;
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     protected abstract String getErrorTopicName();
+
+    protected abstract Class<REQUEST> getRequestType();
 
     protected abstract CommandTemplate<TransactionRequestEntity<REQUEST>, TransactionResponseEntity<REQUEST>> getCommand();
 
     public void execute(ConsumerRecord<String, String> record) {
         try {
-            Class<TransactionRequestEntity> clazz = TransactionRequestEntity.class;
-            TransactionRequestEntity<REQUEST> transactionRequestEntity =
-                    objectMapper.readValue(record.value(), clazz);
+            var javaType = objectMapper.getTypeFactory().constructParametricType(TransactionRequestEntity.class, getRequestType());
+
+            TransactionRequestEntity<REQUEST> transactionRequestEntity = objectMapper.readValue(record.value(), javaType);
+
+            log.info("Procesando mensaje desde topic={} key={} payload={}", record.topic(), record.key(), record.value());
+            setDefaultValues(transactionRequestEntity.getBody());
 
             getCommand().execute(transactionRequestEntity, transactionRequestEntity.getProfile());
+
         } catch (Exception e) {
-            log.error("Error al procesar el mensaje: {}", e.getMessage(), e);
+            log.error("Error procesando mensaje del topic {} con key {}: {}", record.topic(), record.key(), e.getMessage(), e);
             kafkaTemplate.send(getErrorTopicName(), record.value());
         }
     }
+
+    protected abstract void setDefaultValues(REQUEST message);
 }

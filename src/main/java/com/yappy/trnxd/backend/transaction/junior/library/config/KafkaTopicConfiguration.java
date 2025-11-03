@@ -11,7 +11,14 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("kafka.topic")
 public class KafkaTopicConfiguration {
 
-    private String interP2PBegin;
-    private String interP2PBeginError;
-    private String interP2PBeginGroup;
+    private String p2pBeginTopic;
+    private String p2pBeginErrorTopic;
+    private String p2pBeginGroupTopic;
+
+    private String p2pAuthorizeDebitTopic;
+    private String p2pAuthorizeCreditTopic;
+
+    private String p2pCompleteDebitTopic;
+    private String p2pCompleteCreditTopic;
+    private String enyTopic;
 }

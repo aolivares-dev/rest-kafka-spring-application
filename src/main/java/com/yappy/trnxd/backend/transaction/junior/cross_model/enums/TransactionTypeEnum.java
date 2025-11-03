@@ -6,5 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum TransactionTypeEnum {
-    P2P, P2M, M2M, M2P;
+    P2P("", ""), P2M("", ""), M2M("", ""), M2P("", "");
+
+    private final String key;
+    private final String message;
 }

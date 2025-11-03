@@ -8,8 +8,8 @@ import lombok.Getter;
 public enum TransactionStatusEnum {
     COMPLETED("COMPLETED"),
     FAILED("FAILED"),
-    IN_PROGRESS("IN_PROGRESS"),
-    CANCELLED("CANCELLED");
+    PENDING("PENDING"),
+    IN_TRANSIT("IN_TRANSIT");
 
     private final String key;
 

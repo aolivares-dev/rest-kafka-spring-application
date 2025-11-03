@@ -1,6 +1,5 @@
 package com.yappy.trnxd.backend.transaction.junior.library.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -20,18 +19,18 @@ public class ProfileDTO implements Serializable {
     private static final long serialVersionUID = 4984523979650652762L;
 
     @Schema(description = "Id del cliente", nullable = false, example = "998edd8a-3240-4dc7-aae9-47fa30269381")
-    @JsonProperty("client-id")
+    @JsonProperty("client_id")
     protected String clientId;
 
     @Schema(description = "Tipo", nullable = false, example = "P/C/E")
-    @JsonProperty("client-type")
+    @JsonProperty("client_type")
     protected String clientType;
 
     @Schema(description = "Id del usuario", nullable = false, example = "998edd8a-3240-4dc7-aae9-47fa30269381")
-    @JsonProperty("user-id")
+    @JsonProperty("user_id")
     protected String userId;
 
-    @JsonProperty("bank-id")
+    @JsonProperty("bank_id")
     protected String bankId;
 
     @Schema(description = "Fecha", nullable = false, example = "2021-02-24T10:00:55.000Z")
