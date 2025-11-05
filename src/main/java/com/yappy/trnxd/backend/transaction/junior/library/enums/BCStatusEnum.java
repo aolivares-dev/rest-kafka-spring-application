@@ -20,7 +20,9 @@ public enum BCStatusEnum {
     SAME_CLIENT_NOT_ALLOWED("TXN-010", "Same Client Not Allowed", true),
     DUPLICATE_TRANSACTION("TXN-011", "Duplicate Transaction", true),
     TOKEN_GENERATION_FAILED("TXN-012", "Token Generation Failed", true),
-    MANDATORY_FIELDS_MISSING("TXN-013", "Mandatory Fields Missing", true);
+    MANDATORY_FIELDS_MISSING("TXN-013", "Mandatory Fields Missing", true),
+    STATUS_UPDATE_FAILED("TXN-014", "Status Update Failed", true),
+    ;
 
     private final String code;
     private final String message;

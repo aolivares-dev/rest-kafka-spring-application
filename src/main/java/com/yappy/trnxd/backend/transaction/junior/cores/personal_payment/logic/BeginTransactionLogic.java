@@ -4,4 +4,6 @@ public interface BeginTransactionLogic<T> {
 
     void execute(T transaction);
 
+    void updateToFailedStatus(T transaction);
+
 }

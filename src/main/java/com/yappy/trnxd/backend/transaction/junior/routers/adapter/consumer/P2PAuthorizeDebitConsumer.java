@@ -1,7 +1,6 @@
 package com.yappy.trnxd.backend.transaction.junior.routers.adapter.consumer;
 
 
-import com.yappy.trnxd.backend.transaction.junior.cores.personal_payment.command.BeginCommand;
 import com.yappy.trnxd.backend.transaction.junior.cross_model.enums.OperationTypeEnum;
 import com.yappy.trnxd.backend.transaction.junior.cross_model.model.BeginTransactionDTO;
 import com.yappy.trnxd.backend.transaction.junior.cross_model.model.TransactionRequestEntity;
@@ -9,6 +8,7 @@ import com.yappy.trnxd.backend.transaction.junior.cross_model.model.TransactionR
 import com.yappy.trnxd.backend.transaction.junior.library.adapter.consumer.ConsumerTemplate;
 import com.yappy.trnxd.backend.transaction.junior.library.command.CommandTemplate;
 import com.yappy.trnxd.backend.transaction.junior.library.config.KafkaTopicConfiguration;
+import com.yappy.trnxd.backend.transaction.junior.routers.command.AuthorizeCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,11 +21,11 @@ public class P2PAuthorizeDebitConsumer extends ConsumerTemplate<BeginTransaction
     protected KafkaTopicConfiguration kafkaTopicConfiguration;
 
     @Autowired
-    protected BeginCommand command;
+    protected AuthorizeCommand command;
 
     @Override
-    protected String getErrorTopicName() {
-        return kafkaTopicConfiguration.getP2pBeginErrorTopic();
+    protected String getTopicError() {
+        return kafkaTopicConfiguration.getP2pError();
     }
 
     @Override

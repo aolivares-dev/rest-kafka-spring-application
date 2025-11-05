@@ -10,6 +10,7 @@ import com.yappy.trnxd.backend.transaction.junior.library.command.CommandTemplat
 import com.yappy.trnxd.backend.transaction.junior.library.config.KafkaTopicConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -20,11 +21,12 @@ public class P2PBeginConsumer extends ConsumerTemplate<BeginTransactionDTO> {
     protected KafkaTopicConfiguration kafkaTopicConfiguration;
 
     @Autowired
+    @Qualifier("BeginCommand")
     protected BeginCommand command;
 
     @Override
-    protected String getErrorTopicName() {
-        return kafkaTopicConfiguration.getP2pBeginErrorTopic();
+    protected String getTopicError() {
+        return kafkaTopicConfiguration.getP2pError();
     }
 
     @Override

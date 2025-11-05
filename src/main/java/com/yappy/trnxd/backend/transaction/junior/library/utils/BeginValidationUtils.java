@@ -5,7 +5,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BeginTransactionValidationUtils {
+public class BeginValidationUtils {
 
     public boolean bodyRequireValidation(BeginTransactionDTO transactionDTO) {
         return ObjectUtils.isEmpty(transactionDTO.getType()) ||

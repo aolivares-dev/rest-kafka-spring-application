@@ -21,12 +21,12 @@ public class P2PCompleteListener {
     @Qualifier("P2PCompleteCreditConsumer")
     private ConsumerTemplate<BeginTransactionDTO> creditConsumer;
 
-    @KafkaListener(id = "CompleteDebitListener", topics = "${kafka.topic.p2p.completed-debit}", groupId = "${kafka.topic.p2p.completed-group}")
+    @KafkaListener(id = "CompleteDebitListener", topics = "${kafka.topic.p2p-complete-debit}", groupId = "${kafka.topic.p2p-complete-group}")
     public void listenDebitComplete(ConsumerRecord<String, String> consumerRecord) {
         debitConsumer.execute(consumerRecord);
     }
 
-    @KafkaListener(id = "CompleteCreditListener", topics = "${kafka.topic.p2p.completed-credit}", groupId = "${kafka.topic.p2p.completed-group}")
+    @KafkaListener(id = "CompleteCreditListener", topics = "${kafka.topic.p2p-complete-credit}", groupId = "${kafka.topic.p2p-complete-group}")
     public void listenCreditComplete(ConsumerRecord<String, String> consumerRecord) {
         creditConsumer.execute(consumerRecord);
     }

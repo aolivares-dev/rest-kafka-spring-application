@@ -21,12 +21,12 @@ public class P2PAuthorizeListener {
     @Qualifier("P2PAuthorizeCreditConsumer")
     private ConsumerTemplate<BeginTransactionDTO> creditConsumer;
 
-    @KafkaListener(id = "P2PAuthorizeDebitListener", topics = "${kafka.topic.p2p.authorize-debit}", groupId = "${kafka.topic.p2p.authorize-group}")
+    @KafkaListener(id = "P2PAuthorizeDebitListener", topics = "${kafka.topic.p2p-authorize-debit}", groupId = "${kafka.topic.p2p-authorize-group}")
     public void listenDebitAuthorize(ConsumerRecord<String, String> consumerRecord) {
         debitConsumer.execute(consumerRecord);
     }
 
-    @KafkaListener(id = "P2PAuthorizeCreditListener", topics = "${kafka.topic.p2p.authorize-credit}", groupId = "${kafka.topic.p2p.authorize-group}")
+    @KafkaListener(id = "P2PAuthorizeCreditListener", topics = "${kafka.topic.p2p-authorize-credit}", groupId = "${kafka.topic.p2p-authorize-group}")
     public void listenCreditAuthorize(ConsumerRecord<String, String> consumerRecord) {
         creditConsumer.execute(consumerRecord);
     }

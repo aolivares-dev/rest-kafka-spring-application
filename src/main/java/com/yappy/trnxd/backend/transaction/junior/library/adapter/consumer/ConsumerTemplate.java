@@ -18,7 +18,7 @@ public abstract class ConsumerTemplate<REQUEST> {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    protected abstract String getErrorTopicName();
+    protected abstract String getTopicError();
 
     protected abstract Class<REQUEST> getRequestType();
 
@@ -30,16 +30,21 @@ public abstract class ConsumerTemplate<REQUEST> {
 
             TransactionRequestEntity<REQUEST> transactionRequestEntity = objectMapper.readValue(record.value(), javaType);
 
-            log.info("Procesando mensaje desde topic={} key={} payload={}", record.topic(), record.key(), record.value());
             setDefaultValues(transactionRequestEntity.getBody());
 
             getCommand().execute(transactionRequestEntity, transactionRequestEntity.getProfile());
 
         } catch (Exception e) {
-            log.error("Error procesando mensaje del topic {} con key {}: {}", record.topic(), record.key(), e.getMessage(), e);
-            kafkaTemplate.send(getErrorTopicName(), record.value());
+            log.error("Error en el consumo de mensaje: {}", e.getMessage(), e);
+            String topicError = getTopicError();
+            if (topicError == null || topicError.isBlank()) {
+                log.error("No error topic configured (getTopicError() returned null or empty). Mensaje no reenviado: {}", record.value());
+                return;
+            }
+            kafkaTemplate.send(topicError, record.value());
         }
     }
 
-    protected abstract void setDefaultValues(REQUEST message);
+    protected void setDefaultValues(REQUEST message) {
+    }
 }

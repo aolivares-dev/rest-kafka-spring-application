@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 
 @Component
-public class ExecuteTransactionValidationUtils {
+public class ExecuteValidationUtils {
 
     @Value("${transaction.min.amount}")
     private BigDecimal MIN_AMOUNT;

@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component("P2PAuthorizeDebitConsumer")
+@Component("P2PAuthorizeCreditConsumer")
 public class P2PAuthorizeCreditConsumer extends ConsumerTemplate<BeginTransactionDTO> {
 
     @Autowired
@@ -24,8 +24,8 @@ public class P2PAuthorizeCreditConsumer extends ConsumerTemplate<BeginTransactio
     protected AuthorizeCommand command;
 
     @Override
-    protected String getErrorTopicName() {
-        return kafkaTopicConfiguration.getP2pBeginErrorTopic();
+    protected String getTopicError() {
+        return kafkaTopicConfiguration.getP2pError();
     }
 
     @Override

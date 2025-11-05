@@ -14,12 +14,12 @@ public class P2PAuthorizeCreditProducer extends ProducerTemplate {
 
     @Override
     public String getTopic() {
-        return kafkaTopicConfiguration.getP2pAuthorizeCreditTopic();
+        return kafkaTopicConfiguration.getP2pAuthorizeCredit();
     }
 
     @Override
-    public String getErrorTopic() {
-        return "";
+    public String getTopicError() {
+        return kafkaTopicConfiguration.getP2pError();
     }
 
     @Override

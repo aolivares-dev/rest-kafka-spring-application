@@ -1,7 +1,7 @@
 package com.yappy.trnxd.backend.transaction.junior.cores.personal_payment.adapter.consumer;
 
 
-import com.yappy.trnxd.backend.transaction.junior.cores.personal_payment.command.BeginCommand;
+import com.yappy.trnxd.backend.transaction.junior.cores.personal_payment.command.CompleteCommand;
 import com.yappy.trnxd.backend.transaction.junior.cross_model.enums.OperationTypeEnum;
 import com.yappy.trnxd.backend.transaction.junior.cross_model.model.BeginTransactionDTO;
 import com.yappy.trnxd.backend.transaction.junior.cross_model.model.TransactionRequestEntity;
@@ -11,6 +11,7 @@ import com.yappy.trnxd.backend.transaction.junior.library.command.CommandTemplat
 import com.yappy.trnxd.backend.transaction.junior.library.config.KafkaTopicConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -21,11 +22,12 @@ public class P2PCompleteCreditConsumer extends ConsumerTemplate<BeginTransaction
     protected KafkaTopicConfiguration kafkaTopicConfiguration;
 
     @Autowired
-    protected BeginCommand command;
+    @Qualifier("CompleteCommand")
+    protected CompleteCommand command;
 
     @Override
-    protected String getErrorTopicName() {
-        return kafkaTopicConfiguration.getP2pCompleteCreditTopic();
+    protected String getTopicError() {
+        return kafkaTopicConfiguration.getP2pError();
     }
 
     @Override

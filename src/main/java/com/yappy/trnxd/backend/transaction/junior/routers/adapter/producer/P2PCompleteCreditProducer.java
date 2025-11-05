@@ -6,15 +6,15 @@ import com.yappy.trnxd.backend.transaction.junior.library.config.KafkaTopicConfi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component("P2PCompleteDebitProducer")
-public class P2PCompleteDebitProducer extends ProducerTemplate {
+@Component("P2PCompleteCreditProducer")
+public class P2PCompleteCreditProducer extends ProducerTemplate {
 
     @Autowired
     private KafkaTopicConfiguration kafkaTopicConfiguration;
 
     @Override
     public String getTopic() {
-        return kafkaTopicConfiguration.getP2pCompleteDebit();
+        return kafkaTopicConfiguration.getP2pCompleteCredit();
     }
 
     @Override

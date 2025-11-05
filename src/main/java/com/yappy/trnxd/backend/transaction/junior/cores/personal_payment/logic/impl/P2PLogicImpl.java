@@ -9,19 +9,22 @@ import com.yappy.trnxd.backend.transaction.junior.cross_model.mappers.EntitiesMa
 import com.yappy.trnxd.backend.transaction.junior.cross_model.model.BeginTransactionDTO;
 import com.yappy.trnxd.backend.transaction.junior.library.adapter.services.TransactionTokenService;
 import com.yappy.trnxd.backend.transaction.junior.library.enums.BCStatusEnum;
+import com.yappy.trnxd.backend.transaction.junior.library.enums.ExecutionTypeEnum;
 import com.yappy.trnxd.backend.transaction.junior.library.exceptions.BusinessCapabilityException;
-import com.yappy.trnxd.backend.transaction.junior.library.utils.ExecuteTransactionValidationUtils;
+import com.yappy.trnxd.backend.transaction.junior.library.utils.ExecuteValidationUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+@Slf4j
 @Service("P2PLogicImpl")
 public class P2PLogicImpl implements BeginTransactionLogic<BeginTransactionDTO> {
 
     @Autowired
-    protected ExecuteTransactionValidationUtils validateTransactionUtils;
+    protected ExecuteValidationUtils validateTransactionUtils;
 
     @Autowired
     protected TransactionTokenService transactionTokenService;
@@ -39,6 +42,34 @@ public class P2PLogicImpl implements BeginTransactionLogic<BeginTransactionDTO> 
         saveTransaction(transaction);
 
         updateTransactionStatus(transaction);
+    }
+
+    @Override
+    public void updateToFailedStatus(BeginTransactionDTO transaction) {
+
+
+        var allowedStatuses = new ArrayList<String>();
+        allowedStatuses.add(TransactionStatusEnum.PENDING.getKey());
+        allowedStatuses.add(TransactionStatusEnum.IN_TRANSIT.getKey());
+
+        if (ExecutionTypeEnum.INTERNAL.name().equals(transaction.getExecution())) {
+
+            if (allowedStatuses.contains(transaction.getStatus())) {
+                transaction.setStatus(TransactionStatusEnum.FAILED.getKey());
+                p2pRepository.updateInternalTransactionStatus(transaction.getTransactionId(), transaction.getStatus());
+            }
+
+        } else {
+
+            var transactions = p2pRepository.findTransactionsByID(transaction.getTransactionId());
+            for (PersonalEntity payment : transactions) {
+                if (allowedStatuses.contains(payment.getStatus().getKey())) {
+                    payment.setStatus(TransactionStatusEnum.FAILED);
+                    p2pRepository.updateTransactionStatus(payment.getEmbeddedId(), payment.getStatus().getKey());
+                }
+            }
+
+        }
     }
 
     private void validateTransaction(BeginTransactionDTO transaction) {
@@ -75,10 +106,10 @@ public class P2PLogicImpl implements BeginTransactionLogic<BeginTransactionDTO> 
         transaction.setStatus(TransactionStatusEnum.PENDING.getKey());
 
         var debitEntity = entitiesMapper.toDebitEntity(transaction);
-        debitEntity.getEmbeddedId().setOperation(OperationTypeEnum.DEBIT);
+        debitEntity.getEmbeddedId().setOperation(OperationTypeEnum.DEBIT.name());
 
         var creditEntity = entitiesMapper.toCreditEntity(transaction);
-        creditEntity.getEmbeddedId().setOperation(OperationTypeEnum.CREDIT);
+        creditEntity.getEmbeddedId().setOperation(OperationTypeEnum.CREDIT.name());
 
         p2pRepository.save(debitEntity);
         p2pRepository.save(creditEntity);
@@ -90,12 +121,24 @@ public class P2PLogicImpl implements BeginTransactionLogic<BeginTransactionDTO> 
         var allowedStatuses = new ArrayList<String>();
         allowedStatuses.add(TransactionStatusEnum.PENDING.getKey());
 
-        for (PersonalEntity payment : transactions) {
-            if (allowedStatuses.contains(payment.getStatus().getKey())) {
-                payment.setStatus(TransactionStatusEnum.IN_TRANSIT);
+        transactions.forEach(transactionEntity -> {
+            log.info("");
+            if (allowedStatuses.contains(transactionEntity.getStatus().getKey())) {
+                transactionEntity.setStatus(TransactionStatusEnum.IN_TRANSIT);
+                p2pRepository.updateTransactionStatus(transactionEntity.getEmbeddedId(), transactionEntity.getStatus().getKey());
             }
+        });
 
-            p2pRepository.save(payment);
+        transactions = p2pRepository.findTransactionsByID(transaction.getTransactionId());
+        log.info("");
+        if (transactions.stream().allMatch(transactionEntity -> transactionEntity.getStatus().getKey().equals(TransactionStatusEnum.IN_TRANSIT.getKey()))) {
+            transaction.setStatus(TransactionStatusEnum.IN_TRANSIT.getKey());
+        } else {
+            transaction.setStatus(TransactionStatusEnum.FAILED.getKey());
+        }
+
+        if (transaction.getStatus().equals(TransactionStatusEnum.FAILED.getKey())) {
+            throw new BusinessCapabilityException(BCStatusEnum.STATUS_UPDATE_FAILED.getMessage(), BCStatusEnum.STATUS_UPDATE_FAILED.getCode());
         }
     }
 }

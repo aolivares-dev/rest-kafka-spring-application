@@ -18,8 +18,8 @@ public class P2PBeginListener {
     private ConsumerTemplate<BeginTransactionDTO> consumer;
 
     @KafkaListener(id = "P2PBeginListener",
-            topics = "${kafka.topic.p2p.begin}",
-            groupId = "${kafka.topic.p2p.begin-group}")
+            topics = "${kafka.topic.p2p-begin}",
+            groupId = "${kafka.topic.p2p-begin-group}")
     public void listen(ConsumerRecord<String, String> consumerRecord) {
         consumer.execute(consumerRecord);
     }

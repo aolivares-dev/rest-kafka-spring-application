@@ -26,20 +26,20 @@ public class PersonalEntity implements Serializable {
     PersonalEmbeddedDTO embeddedId;
 
     @Column(name = "amount", nullable = false, updatable = false)
-    private BigDecimal amount;
+    public BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "txn_type", nullable = false, updatable = false)
-    private TransactionTypeEnum type;
+    public TransactionTypeEnum type;
 
     @Column(name = "bank_id", nullable = false, updatable = false)
-    private String bankId;
+    public String bankId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, updatable = false)
-    private TransactionStatusEnum status;
+    public TransactionStatusEnum status;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "execution_type", nullable = false, updatable = false)
-    private ExecutionTypeEnum execution;
+    public ExecutionTypeEnum execution;
 }

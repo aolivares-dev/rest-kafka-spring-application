@@ -14,12 +14,12 @@ public class P2PAuthorizeDebitProducer extends ProducerTemplate {
 
     @Override
     public String getTopic() {
-        return kafkaTopicConfiguration.getP2pAuthorizeDebitTopic();
+        return kafkaTopicConfiguration.getP2pAuthorizeDebit();
     }
 
     @Override
-    public String getErrorTopic() {
-        return "";
+    public String getTopicError() {
+        return kafkaTopicConfiguration.getP2pError();
     }
 
     @Override
